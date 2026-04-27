@@ -116,7 +116,7 @@ button {
     padding: 1.25rem;
     margin-bottom: 1.5rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 160px 160px 1fr auto;
     gap: 1rem;
 }
 
@@ -143,7 +143,16 @@ button {
 .filter-actions {
     display: flex;
     align-items: flex-end;
-    padding-bottom: 0.1rem;
+}
+
+button.icon-only {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
 }
 
 /* KPIs */
@@ -482,6 +491,12 @@ input:focus {
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+    .filters-container {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
     .form-grid { grid-template-columns: 1fr; }
     .form-group.full-width { grid-column: span 1; }
