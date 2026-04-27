@@ -89,8 +89,26 @@ function populateChoices() {
 
 // Formatador de Moeda
 function formatCurrency(value) {
-    if(!value && value !== 0) return '-';
-    return Number(value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    if (value === null || value === undefined || value === '') return '-';
+    
+    let num = value;
+    if (typeof value === 'string') {
+        // Remove símbolos de moeda, espaços, etc. Mantém apenas dígitos, ponto, vírgula e sinal de menos
+        let cleanStr = value.replace(/[^\d.,-]/g, '');
+        
+        // Verifica se é no formato brasileiro com vírgula para decimal
+        if (cleanStr.includes(',')) {
+            // Remove os pontos de milhar e troca a vírgula por ponto decimal
+            cleanStr = cleanStr.replace(/\./g, '').replace(',', '.');
+        }
+        num = parseFloat(cleanStr);
+    } else {
+        num = Number(value);
+    }
+    
+    if (isNaN(num)) return value;
+    
+    return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
 // Renderizar Tabela
