@@ -101,6 +101,9 @@ button {
 .btn-icon.edit { color: var(--primary); }
 .btn-icon.edit:hover { background-color: #e0f2fe; }
 
+.btn-icon.clone { color: #f59e0b; }
+.btn-icon.clone:hover { background-color: #fef3c7; }
+
 .btn-icon.delete { color: var(--danger); }
 .btn-icon.delete:hover { background-color: #fee2e2; }
 

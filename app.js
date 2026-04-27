@@ -131,6 +131,9 @@ function renderTable() {
             <button class="btn-icon edit" onclick="openModal('update', ${row._rowId})" title="Editar">
                 <i class="ri-pencil-line"></i>
             </button>
+            <button class="btn-icon clone" onclick="openModal('clone', ${row._rowId})" title="Clonar">
+                <i class="ri-file-copy-line"></i>
+            </button>
             <button class="btn-icon delete" onclick="deleteData(${row._rowId})" title="Excluir">
                 <i class="ri-delete-bin-line"></i>
             </button>
@@ -202,17 +205,17 @@ function clearFilters() {
 
 // Abrir Modal
 function openModal(action, rowId = null) {
-    currentAction = action;
+    currentAction = action === 'clone' ? 'create' : action;
     dataForm.reset();
     
     if (action === 'create') {
         modalTitle.textContent = 'Nova Ação';
         document.getElementById('_rowId').value = '';
     } else {
-        modalTitle.textContent = 'Editar Ação';
+        modalTitle.textContent = action === 'clone' ? 'Clonar Ação' : 'Editar Ação';
         const rowData = appData.find(r => r._rowId === rowId);
         if (rowData) {
-            document.getElementById('_rowId').value = rowData._rowId;
+            document.getElementById('_rowId').value = action === 'clone' ? '' : rowData._rowId;
             document.getElementById('Ano_Lancamento').value = rowData['Ano Lançamento'];
             document.getElementById('Acao_Governo').value = rowData['Ação Governo'];
             document.getElementById('Descricao_Acao').value = rowData['Descrição da Ação'] || '';
@@ -285,7 +288,7 @@ async function saveData() {
 
 // Excluir
 async function deleteData(rowId) {
-    if (!confirm('Tem certeza que deseja excluir esta linha? Esta ação não pode ser desfeita.')) {
+    if (!confirm('Confirmar exclusão?')) {
         return;
     }
 
