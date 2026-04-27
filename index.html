@@ -25,7 +25,24 @@
             </button>
         </header>
 
-        <!-- Filtros Superiores -->
+        <!-- Tabs Navigation -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchTab('view-geral')">
+                <i class="ri-table-line"></i> Visão Geral
+            </button>
+            <button class="tab-btn" onclick="switchTab('view-graficos')">
+                <i class="ri-pie-chart-line"></i> Gráficos
+            </button>
+        </div>
+
+        <!-- Loader -->
+        <div id="loader" class="loader-container">
+            <div class="spinner"></div>
+            <p>Carregando dados da planilha...</p>
+        </div>
+
+        <div id="view-geral" class="tab-content" style="display: none;">
+            <!-- Filtros Superiores -->
         <div class="filters-container">
             <div class="filter-group">
                 <label for="filterAno">Ano Lançamento</label>
@@ -77,10 +94,6 @@
             </div>
         </div>
 
-        <!-- Loader -->
-        <div id="loader" class="loader-container">
-            <div class="spinner"></div>
-            <p>Carregando dados da planilha...</p>
         </div>
 
         <!-- Tabela -->
@@ -102,11 +115,20 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-                        <!-- Linhas geradas dinamicamente -->
                     </tbody>
                 </table>
             </div>
         </div>
+        </div> <!-- Fim view-geral -->
+
+        <div id="view-graficos" class="tab-content" style="display: none;">
+            <div class="empty-state">
+                <i class="ri-bar-chart-grouped-line"></i>
+                <h2>Área de Gráficos</h2>
+                <p>Esta seção está em construção e em breve abrigará os painéis analíticos dinâmicos.</p>
+            </div>
+        </div>
+
     </div>
 
     <!-- Modal Formulario -->

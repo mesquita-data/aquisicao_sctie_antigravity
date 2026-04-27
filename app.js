@@ -69,6 +69,17 @@ async function loadData() {
             tableCard.style.display = 'block';
             document.getElementById('tableHeaderInfo').style.display = 'flex';
             document.getElementById('kpiContainer').style.display = 'grid';
+            
+            // Verifica qual aba está ativa e a exibe
+            const activeTab = document.querySelector('.tab-btn.active');
+            if (activeTab) {
+                const tabIdMatch = activeTab.getAttribute('onclick').match(/'([^']+)'/);
+                if (tabIdMatch) {
+                    document.getElementById(tabIdMatch[1]).style.display = 'block';
+                }
+            } else {
+                document.getElementById('view-geral').style.display = 'block';
+            }
         } else {
             throw new Error(result.message);
         }
@@ -448,6 +459,28 @@ async function deleteData(rowId) {
         showToast('Erro ao excluir: ' + error.message, true);
         tableCard.style.display = 'block';
         loader.style.display = 'none';
+    }
+}
+
+// Gerenciar Abas
+function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => {
+        el.style.display = 'none';
+    });
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    
+    const targetBtn = event.currentTarget;
+    if (targetBtn) {
+        targetBtn.classList.add('active');
+    }
+    
+    // Só exibe se os dados já tiverem sido carregados (loader oculto)
+    const loader = document.getElementById('loader');
+    if (loader && loader.style.display === 'none') {
+        document.getElementById(tabId).style.display = 'block';
     }
 }
 
