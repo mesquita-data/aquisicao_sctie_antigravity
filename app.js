@@ -6,6 +6,8 @@ let filteredData = [];
 let currentAction = 'create'; // 'create' or 'update'
 let currentSortCol = null;
 let currentSortDir = 'asc';
+let currentPage = 1;
+const rowsPerPage = 10;
 
 // Choices.js instances
 let choicesAno, choicesAcaoGov, choicesDescAcao;
@@ -69,6 +71,7 @@ async function loadData() {
             tableCard.style.display = 'block';
             document.getElementById('tableHeaderInfo').style.display = 'flex';
             document.getElementById('kpiContainer').style.display = 'grid';
+            document.getElementById('paginationContainer').style.display = 'flex';
             
             // Verifica qual aba está ativa e a exibe
             const activeTab = document.querySelector('.tab-btn.active');
@@ -167,7 +170,18 @@ function renderTable() {
     
     updateKPIs();
     
-    filteredData.forEach(row => {
+    // Paginação
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+    
+    updatePaginationUI(totalPages);
+    
+    const startIndex = (currentPage - 1) * rowsPerPage;
+    const endIndex = startIndex + rowsPerPage;
+    const paginatedData = filteredData.slice(startIndex, endIndex);
+    
+    paginatedData.forEach(row => {
         // Linha Principal
         const tr = document.createElement('tr');
         tr.className = 'main-row';
@@ -276,8 +290,23 @@ function applyFilters() {
         return matchAno && matchAcaoGov && matchDescAcao;
     });
 
+    currentPage = 1; // Resetar para página 1 ao aplicar filtros
     applySort();
     renderTable();
+}
+
+function changePage(delta) {
+    const totalPages = Math.ceil(filteredData.length / rowsPerPage) || 1;
+    currentPage += delta;
+    if (currentPage < 1) currentPage = 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    renderTable();
+}
+
+function updatePaginationUI(totalPages) {
+    document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+    document.getElementById('btnPrevPage').disabled = currentPage === 1;
+    document.getElementById('btnNextPage').disabled = currentPage === totalPages;
 }
 
 function sortTable(column) {

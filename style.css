@@ -22,6 +22,41 @@
     box-sizing: border-box;
 }
 
+/* Paginação */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    background-color: var(--card-bg);
+    border-bottom-left-radius: var(--radius);
+    border-bottom-right-radius: var(--radius);
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f1f5f9;
+    color: #94a3b8;
+    border-color: var(--border);
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
 body {
     font-family: 'Inter', sans-serif;
     background-color: var(--bg-color);

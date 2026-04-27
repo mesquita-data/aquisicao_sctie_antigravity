@@ -118,6 +118,17 @@
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Paginação -->
+            <div class="pagination-container" id="paginationContainer" style="display: none;">
+                <button class="btn-secondary pagination-btn" id="btnPrevPage" onclick="changePage(-1)">
+                    <i class="ri-arrow-left-s-line"></i> Anterior
+                </button>
+                <span class="pagination-info" id="pageInfo">Página 1 de 1</span>
+                <button class="btn-secondary pagination-btn" id="btnNextPage" onclick="changePage(1)">
+                    Próximo <i class="ri-arrow-right-s-line"></i>
+                </button>
+            </div>
         </div>
         </div> <!-- Fim view-geral -->
 
