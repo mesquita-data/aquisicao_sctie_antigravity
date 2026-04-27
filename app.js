@@ -124,7 +124,18 @@ function renderTable() {
     }
     
     filteredData.forEach(row => {
+        // Linha Principal
         const tr = document.createElement('tr');
+        tr.className = 'main-row';
+        tr.id = `row-${row._rowId}`;
+        
+        // Botão de expandir
+        const tdExpand = document.createElement('td');
+        tdExpand.innerHTML = `
+            <button class="btn-icon expand" onclick="toggleDetails(${row._rowId})" title="Ver Detalhes">
+                <i class="ri-arrow-right-s-line" id="expand-icon-${row._rowId}"></i>
+            </button>
+        `;
         
         // Ações
         const tdActions = document.createElement('td');
@@ -141,18 +152,12 @@ function renderTable() {
             </button>
         `;
         
-        // Dados
+        // Dados Principais
         const tdAno = document.createElement('td');
         tdAno.textContent = row['Ano Lançamento'] || '-';
         
-        const tdDescAcao = document.createElement('td');
-        tdDescAcao.textContent = row['Descrição da Ação'] || '-';
-        
         const tdPlanoOrc = document.createElement('td');
         tdPlanoOrc.textContent = row['Plano Orçamentário'] || '-';
-        
-        const tdDescPO = document.createElement('td');
-        tdDescPO.textContent = row['Descrição PO'] || '-';
         
         const tdProjInicial = document.createElement('td');
         tdProjInicial.textContent = formatCurrency(row['Projeto Inicial LOA']);
@@ -163,17 +168,49 @@ function renderTable() {
         const tdAtualizada = document.createElement('td');
         tdAtualizada.textContent = formatCurrency(row['Dotação Atualizada']);
         
+        tr.appendChild(tdExpand);
         tr.appendChild(tdActions);
         tr.appendChild(tdAno);
-        tr.appendChild(tdDescAcao);
         tr.appendChild(tdPlanoOrc);
-        tr.appendChild(tdDescPO);
         tr.appendChild(tdProjInicial);
         tr.appendChild(tdInicial);
         tr.appendChild(tdAtualizada);
         
         tableBody.appendChild(tr);
+
+        // Sublinha de Detalhes
+        const trDetails = document.createElement('tr');
+        trDetails.className = 'details-row';
+        trDetails.id = `details-${row._rowId}`;
+        trDetails.style.display = 'none';
+        
+        const tdDetails = document.createElement('td');
+        tdDetails.colSpan = 7; // Expandir por todas as colunas
+        tdDetails.innerHTML = `
+            <div class="details-content">
+                <div><strong>Descrição da Ação:</strong> ${row['Descrição da Ação'] || '-'}</div>
+                <div><strong>Descrição PO:</strong> ${row['Descrição PO'] || '-'}</div>
+            </div>
+        `;
+        trDetails.appendChild(tdDetails);
+        tableBody.appendChild(trDetails);
     });
+}
+
+// Alternar Visibilidade da Sublinha
+function toggleDetails(rowId) {
+    const detailsRow = document.getElementById(`details-${rowId}`);
+    const icon = document.getElementById(`expand-icon-${rowId}`);
+    
+    if (detailsRow.style.display === 'none') {
+        detailsRow.style.display = 'table-row';
+        icon.className = 'ri-arrow-down-s-line';
+        document.getElementById(`row-${rowId}`).classList.add('expanded');
+    } else {
+        detailsRow.style.display = 'none';
+        icon.className = 'ri-arrow-right-s-line';
+        document.getElementById(`row-${rowId}`).classList.remove('expanded');
+    }
 }
 
 // Filtros

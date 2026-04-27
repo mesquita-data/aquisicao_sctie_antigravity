@@ -219,6 +219,40 @@ th.sortable:hover .sort-icon {
     color: var(--primary);
 }
 
+/* Detalhes expansíveis */
+.btn-icon.expand {
+    color: var(--text-muted);
+    font-size: 1.25rem;
+}
+.btn-icon.expand:hover {
+    background-color: var(--secondary);
+    color: var(--text-main);
+}
+
+tr.expanded {
+    background-color: #f1f5f9;
+}
+
+tr.details-row td {
+    padding: 0;
+    border-bottom: 2px solid var(--primary);
+    background-color: #f8fafc;
+}
+
+.details-content {
+    padding: 1rem 1.5rem;
+    font-size: 0.75rem;
+    color: var(--text-main);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.details-content strong {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
 td {
     padding: 1rem;
     font-size: 0.875rem;
