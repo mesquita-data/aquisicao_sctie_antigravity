@@ -80,7 +80,7 @@ async function loadData() {
 function populateChoices() {
     const anos = [...new Set(appData.map(r => r['Ano Lançamento']).filter(Boolean))].sort();
     const acoes = [...new Set(appData.map(r => r['Ação Governo']).filter(Boolean))].sort();
-    const descAcoes = [...new Set(appData.map(r => r['Descrição Ação']).filter(Boolean))].sort();
+    const descAcoes = [...new Set(appData.map(r => r['Descrição da Ação']).filter(Boolean))].sort();
 
     choicesAno.setChoices(anos.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
     choicesAcaoGov.setChoices(acoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
@@ -123,7 +123,7 @@ function renderTable() {
         tdAno.textContent = row['Ano Lançamento'] || '-';
         
         const tdDescAcao = document.createElement('td');
-        tdDescAcao.textContent = row['Descrição Ação'] || '-';
+        tdDescAcao.textContent = row['Descrição da Ação'] || '-';
         
         const tdPlanoOrc = document.createElement('td');
         tdPlanoOrc.textContent = row['Plano Orçamentário'] || '-';
@@ -132,13 +132,13 @@ function renderTable() {
         tdDescPO.textContent = row['Descrição PO'] || '-';
         
         const tdProjInicial = document.createElement('td');
-        tdProjInicial.textContent = formatCurrency(row['PROJETO INICIAL DA LOA - FIXACAO DESPESA']);
+        tdProjInicial.textContent = formatCurrency(row['Projeto Inicial LOA']);
         
         const tdInicial = document.createElement('td');
-        tdInicial.textContent = formatCurrency(row['DOTACAO INICIAL']);
+        tdInicial.textContent = formatCurrency(row['Dotação Inicial']);
         
         const tdAtualizada = document.createElement('td');
-        tdAtualizada.textContent = formatCurrency(row['DOTACAO ATUALIZADA']);
+        tdAtualizada.textContent = formatCurrency(row['Dotação Atualizada']);
         
         tr.appendChild(tdActions);
         tr.appendChild(tdAno);
@@ -163,7 +163,7 @@ function applyFilters() {
     filteredData = appData.filter(row => {
         const ano = (row['Ano Lançamento'] || '').toString();
         const acaoGov = (row['Ação Governo'] || '').toString();
-        const descAcao = (row['Descrição Ação'] || '').toString();
+        const descAcao = (row['Descrição da Ação'] || '').toString();
 
         const matchAno = selAno.length === 0 || selAno.includes(ano);
         const matchAcaoGov = selAcaoGov.length === 0 || selAcaoGov.includes(acaoGov);
@@ -197,13 +197,13 @@ function openModal(action, rowId = null) {
             document.getElementById('_rowId').value = rowData._rowId;
             document.getElementById('Ano_Lancamento').value = rowData['Ano Lançamento'];
             document.getElementById('Acao_Governo').value = rowData['Ação Governo'];
-            document.getElementById('Descricao_Acao').value = rowData['Descrição Ação'];
-            document.getElementById('Plano_Orcamentario').value = rowData['Plano Orçamentário'];
-            document.getElementById('PO_parte1').value = rowData['PO_parte1'];
-            document.getElementById('Fonte_SOF').value = rowData['Fonte SOF'];
-            document.getElementById('PROJETO_INICIAL').value = rowData['PROJETO INICIAL DA LOA - FIXACAO DESPESA'];
-            document.getElementById('DOTACAO_INICIAL').value = rowData['DOTACAO INICIAL'];
-            document.getElementById('DOTACAO_ATUALIZADA').value = rowData['DOTACAO ATUALIZADA'];
+            document.getElementById('Descricao_Acao').value = rowData['Descrição da Ação'] || '';
+            document.getElementById('Plano_Orcamentario').value = rowData['Plano Orçamentário'] || '';
+            document.getElementById('PO_parte1').value = rowData['PO_parte1'] || '';
+            document.getElementById('Fonte_SOF').value = rowData['Fonte SOF'] || '';
+            document.getElementById('PROJETO_INICIAL').value = rowData['Projeto Inicial LOA'] || '';
+            document.getElementById('DOTACAO_INICIAL').value = rowData['Dotação Inicial'] || '';
+            document.getElementById('DOTACAO_ATUALIZADA').value = rowData['Dotação Atualizada'] || '';
         }
     }
     
