@@ -192,6 +192,33 @@ th {
     white-space: nowrap;
 }
 
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+th.sortable:hover {
+    background-color: #e2e8f0;
+    color: var(--text-main);
+}
+
+.sort-icon {
+    margin-left: 0.25rem;
+    color: #94a3b8;
+    opacity: 0.5;
+    transition: all 0.2s;
+}
+
+th.sortable:hover .sort-icon {
+    opacity: 1;
+}
+
+.sort-icon.active {
+    opacity: 1;
+    color: var(--primary);
+}
+
 td {
     padding: 1rem;
     font-size: 0.875rem;

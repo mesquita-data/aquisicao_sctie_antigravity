@@ -4,6 +4,8 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbwC6fvMyPydxzkitjrkf7ej
 let appData = [];
 let filteredData = [];
 let currentAction = 'create'; // 'create' or 'update'
+let currentSortCol = null;
+let currentSortDir = 'asc';
 
 // Choices.js instances
 let choicesAno, choicesAcaoGov, choicesDescAcao;
@@ -193,7 +195,65 @@ function applyFilters() {
         return matchAno && matchAcaoGov && matchDescAcao;
     });
 
+    applySort();
     renderTable();
+}
+
+function sortTable(column) {
+    if (currentSortCol === column) {
+        currentSortDir = currentSortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+        currentSortCol = column;
+        currentSortDir = 'asc';
+    }
+    applySort();
+    renderTable();
+}
+
+function applySort() {
+    if (!currentSortCol) return;
+    
+    filteredData.sort((a, b) => {
+        let valA = a[currentSortCol];
+        let valB = b[currentSortCol];
+
+        if (valA == null) valA = '';
+        if (valB == null) valB = '';
+
+        // Tentar converter para número, considerando que as colunas de valor têm vírgulas
+        let numA = parseFloat(valA.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
+        let numB = parseFloat(valB.toString().replace(/[^\d,-]/g, '').replace(',', '.'));
+
+        // Valida se a coluna deve ser tratada como número de forma estrita (apenas se as strings parecem dinheiro ou números)
+        // Uma verificação simples: se for NaN, volta para string.
+        if (!isNaN(numA) && !isNaN(numB) && valA !== '' && valB !== '') {
+            return currentSortDir === 'asc' ? numA - numB : numB - numA;
+        }
+
+        valA = valA.toString().toLowerCase();
+        valB = valB.toString().toLowerCase();
+
+        if (valA < valB) return currentSortDir === 'asc' ? -1 : 1;
+        if (valA > valB) return currentSortDir === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    updateSortIcons();
+}
+
+function updateSortIcons() {
+    const headers = document.querySelectorAll('th.sortable');
+    headers.forEach(th => {
+        const icon = th.querySelector('.sort-icon');
+        if(!icon) return;
+        const col = th.getAttribute('data-col');
+        
+        if (col === currentSortCol) {
+            icon.className = currentSortDir === 'asc' ? 'ri-sort-asc sort-icon active' : 'ri-sort-desc sort-icon active';
+        } else {
+            icon.className = 'ri-arrow-up-down-line sort-icon';
+        }
+    });
 }
 
 function clearFilters() {
