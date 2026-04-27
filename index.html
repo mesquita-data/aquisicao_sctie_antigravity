@@ -39,9 +39,10 @@
                 <label for="filterDescAcao">Descrição da Ação</label>
                 <select id="filterDescAcao" multiple data-placeholder="Filtrar descrição..."></select>
             </div>
-            <div class="filter-group">
-                <label for="filterDescPO">Descrição PO</label>
-                <select id="filterDescPO" multiple data-placeholder="Filtrar desc. PO..."></select>
+            <div class="filter-actions">
+                <button class="btn-secondary" onclick="clearFilters()" title="Limpar todos os filtros">
+                    <i class="ri-filter-off-line"></i> Limpar Filtros
+                </button>
             </div>
         </div>
 
@@ -52,6 +53,9 @@
         </div>
 
         <!-- Tabela -->
+        <div class="table-header-info" id="tableHeaderInfo" style="display: none;">
+            <p id="recordCounter" class="record-counter">0 de 0 linhas</p>
+        </div>
         <div class="table-card" id="tableCard" style="display: none;">
             <div class="table-wrapper">
                 <table id="dataTable">

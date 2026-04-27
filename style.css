@@ -137,6 +137,27 @@ button {
     font-size: 0.875rem;
 }
 
+.filter-actions {
+    display: flex;
+    align-items: flex-end;
+    padding-bottom: 0.1rem;
+}
+
+.table-header-info {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+.record-counter {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: #e2e8f0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+}
+
 /* Table Card */
 .table-card {
     background: var(--card-bg);

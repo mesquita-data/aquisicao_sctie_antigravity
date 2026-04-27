@@ -6,7 +6,7 @@ let filteredData = [];
 let currentAction = 'create'; // 'create' or 'update'
 
 // Choices.js instances
-let choicesAno, choicesAcaoGov, choicesDescAcao, choicesDescPO;
+let choicesAno, choicesAcaoGov, choicesDescAcao;
 
 // Elementos da UI
 const tableCard = document.getElementById('tableCard');
@@ -33,12 +33,10 @@ function initChoices() {
     choicesAno = new Choices('#filterAno', config);
     choicesAcaoGov = new Choices('#filterAcaoGov', config);
     choicesDescAcao = new Choices('#filterDescAcao', config);
-    choicesDescPO = new Choices('#filterDescPO', config);
 
     document.getElementById('filterAno').addEventListener('change', applyFilters);
     document.getElementById('filterAcaoGov').addEventListener('change', applyFilters);
     document.getElementById('filterDescAcao').addEventListener('change', applyFilters);
-    document.getElementById('filterDescPO').addEventListener('change', applyFilters);
 }
 
 // Mostra notificações na tela
@@ -67,6 +65,7 @@ async function loadData() {
             filteredData = [...appData];
             renderTable();
             tableCard.style.display = 'block';
+            document.getElementById('tableHeaderInfo').style.display = 'flex';
         } else {
             throw new Error(result.message);
         }
@@ -82,12 +81,10 @@ function populateChoices() {
     const anos = [...new Set(appData.map(r => r['Ano Lançamento']).filter(Boolean))].sort();
     const acoes = [...new Set(appData.map(r => r['Ação Governo']).filter(Boolean))].sort();
     const descAcoes = [...new Set(appData.map(r => r['Descrição Ação']).filter(Boolean))].sort();
-    const descPOs = [...new Set(appData.map(r => r['Descrição PO']).filter(Boolean))].sort();
 
     choicesAno.setChoices(anos.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
     choicesAcaoGov.setChoices(acoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
     choicesDescAcao.setChoices(descAcoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
-    choicesDescPO.setChoices(descPOs.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
 }
 
 // Formatador de Moeda
@@ -99,6 +96,12 @@ function formatCurrency(value) {
 // Renderizar Tabela
 function renderTable() {
     tableBody.innerHTML = '';
+    
+    // Atualiza contador
+    const counter = document.getElementById('recordCounter');
+    if (counter) {
+        counter.textContent = `${filteredData.length} de ${appData.length} linhas`;
+    }
     
     filteredData.forEach(row => {
         const tr = document.createElement('tr');
@@ -156,23 +159,27 @@ function applyFilters() {
     const selAno = choicesAno.getValue(true) || [];
     const selAcaoGov = choicesAcaoGov.getValue(true) || [];
     const selDescAcao = choicesDescAcao.getValue(true) || [];
-    const selDescPO = choicesDescPO.getValue(true) || [];
 
     filteredData = appData.filter(row => {
         const ano = (row['Ano Lançamento'] || '').toString();
         const acaoGov = (row['Ação Governo'] || '').toString();
         const descAcao = (row['Descrição Ação'] || '').toString();
-        const descPO = (row['Descrição PO'] || '').toString();
 
         const matchAno = selAno.length === 0 || selAno.includes(ano);
         const matchAcaoGov = selAcaoGov.length === 0 || selAcaoGov.includes(acaoGov);
         const matchDescAcao = selDescAcao.length === 0 || selDescAcao.includes(descAcao);
-        const matchDescPO = selDescPO.length === 0 || selDescPO.includes(descPO);
 
-        return matchAno && matchAcaoGov && matchDescAcao && matchDescPO;
+        return matchAno && matchAcaoGov && matchDescAcao;
     });
 
     renderTable();
+}
+
+function clearFilters() {
+    choicesAno.removeActiveItems();
+    choicesAcaoGov.removeActiveItems();
+    choicesDescAcao.removeActiveItems();
+    // A própria remoção dispara o evento change que chama applyFilters()
 }
 
 // Abrir Modal
