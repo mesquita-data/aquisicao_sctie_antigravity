@@ -71,6 +71,7 @@ async function loadData() {
             tableCard.style.display = 'block';
             document.getElementById('tableHeaderInfo').style.display = 'flex';
             document.getElementById('kpiContainer').style.display = 'grid';
+            document.getElementById('actionBar').style.display = 'block';
             document.getElementById('paginationContainer').style.display = 'flex';
             
             // Verifica qual aba está ativa e a exibe
@@ -510,12 +511,6 @@ function switchTab(tabId) {
     const loader = document.getElementById('loader');
     if (loader && loader.style.display === 'none') {
         document.getElementById(tabId).style.display = 'block';
-    }
-    
-    // Mostra o botão "Nova Ação" apenas na aba Visão Geral
-    const btnNovaAcao = document.getElementById('btnNovaAcao');
-    if (btnNovaAcao) {
-        btnNovaAcao.style.display = tabId === 'view-geral' ? 'inline-flex' : 'none';
     }
 }
 

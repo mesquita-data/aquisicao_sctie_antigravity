@@ -19,10 +19,6 @@
             <div class="header-content">
                 <h1>Painel de Ações LOA (SCTIE)</h1>
                 <p>Gerenciamento Integrado com Google Sheets (em teste)</p>
-            </div>
-            <button class="btn-primary" id="btnNovaAcao" onclick="openModal('create')">
-                <i class="ri-add-line"></i> Nova Ação
-            </button>
         </header>
 
         <!-- Tabs Navigation -->
@@ -94,6 +90,10 @@
             </div>
         </div>
 
+        <div class="action-bar" id="actionBar" style="display: none; margin-bottom: 1rem; text-align: right;">
+            <button class="btn-primary" id="btnNovaAcao" onclick="openModal('create')">
+                <i class="ri-add-line"></i> Nova Ação
+            </button>
         </div>
 
         <!-- Tabela -->
