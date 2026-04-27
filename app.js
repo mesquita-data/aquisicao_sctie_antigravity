@@ -2,6 +2,7 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbwC6fvMyPydxzkitjrkf7ejZDQtpQmBt60qTDwgkAkjYBooogQMAGPoQZS3C9ukTMcbMg/exec'; 
 
 let appData = [];
+let filteredData = [];
 let currentAction = 'create'; // 'create' or 'update'
 
 // Elementos da UI
@@ -44,6 +45,7 @@ async function loadData() {
 
         if (result.status === 'success') {
             appData = result.data;
+            filteredData = [...appData];
             renderTable();
             tableCard.style.display = 'block';
         } else {
@@ -66,7 +68,7 @@ function formatCurrency(value) {
 function renderTable() {
     tableBody.innerHTML = '';
     
-    appData.forEach(row => {
+    filteredData.forEach(row => {
         const tr = document.createElement('tr');
         
         // Ações
@@ -85,11 +87,17 @@ function renderTable() {
         const tdAno = document.createElement('td');
         tdAno.textContent = row['Ano Lançamento'] || '-';
         
-        const tdGov = document.createElement('td');
-        tdGov.textContent = row['Ação Governo'] || '-';
+        const tdDescAcao = document.createElement('td');
+        tdDescAcao.textContent = row['Descrição Ação'] || '-';
         
-        const tdPo = document.createElement('td');
-        tdPo.textContent = row['PO_parte1'] || '-';
+        const tdPlanoOrc = document.createElement('td');
+        tdPlanoOrc.textContent = row['Plano Orçamentário'] || '-';
+        
+        const tdDescPO = document.createElement('td');
+        tdDescPO.textContent = row['Descrição PO'] || '-';
+        
+        const tdProjInicial = document.createElement('td');
+        tdProjInicial.textContent = formatCurrency(row['PROJETO INICIAL DA LOA - FIXACAO DESPESA']);
         
         const tdInicial = document.createElement('td');
         tdInicial.textContent = formatCurrency(row['DOTACAO INICIAL']);
@@ -99,13 +107,37 @@ function renderTable() {
         
         tr.appendChild(tdActions);
         tr.appendChild(tdAno);
-        tr.appendChild(tdGov);
-        tr.appendChild(tdPo);
+        tr.appendChild(tdDescAcao);
+        tr.appendChild(tdPlanoOrc);
+        tr.appendChild(tdDescPO);
+        tr.appendChild(tdProjInicial);
         tr.appendChild(tdInicial);
         tr.appendChild(tdAtualizada);
         
         tableBody.appendChild(tr);
     });
+}
+
+// Filtros
+function applyFilters() {
+    const filterAno = document.getElementById('filterAno').value.toLowerCase();
+    const filterAcaoGov = document.getElementById('filterAcaoGov').value.toLowerCase();
+    const filterDescAcao = document.getElementById('filterDescAcao').value.toLowerCase();
+    const filterDescPO = document.getElementById('filterDescPO').value.toLowerCase();
+
+    filteredData = appData.filter(row => {
+        const ano = (row['Ano Lançamento'] || '').toString().toLowerCase();
+        const acaoGov = (row['Ação Governo'] || '').toString().toLowerCase();
+        const descAcao = (row['Descrição Ação'] || '').toString().toLowerCase();
+        const descPO = (row['Descrição PO'] || '').toString().toLowerCase();
+
+        return ano.includes(filterAno) &&
+               acaoGov.includes(filterAcaoGov) &&
+               descAcao.includes(filterDescAcao) &&
+               descPO.includes(filterDescPO);
+    });
+
+    renderTable();
 }
 
 // Abrir Modal

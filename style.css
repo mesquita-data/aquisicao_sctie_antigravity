@@ -104,6 +104,39 @@ button {
 .btn-icon.delete { color: var(--danger); }
 .btn-icon.delete:hover { background-color: #fee2e2; }
 
+/* Filters */
+.filters-container {
+    background: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.filter-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0;
+}
+
+.filter-group input {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+}
+
 /* Table Card */
 .table-card {
     background: var(--card-bg);

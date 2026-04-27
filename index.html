@@ -23,6 +23,26 @@
             </button>
         </header>
 
+        <!-- Filtros Superiores -->
+        <div class="filters-container">
+            <div class="filter-group">
+                <label for="filterAno">Ano Lançamento</label>
+                <input type="text" id="filterAno" placeholder="Ex: 2024" oninput="applyFilters()">
+            </div>
+            <div class="filter-group">
+                <label for="filterAcaoGov">Ação Governo</label>
+                <input type="text" id="filterAcaoGov" placeholder="Filtrar ação..." oninput="applyFilters()">
+            </div>
+            <div class="filter-group">
+                <label for="filterDescAcao">Descrição da Ação</label>
+                <input type="text" id="filterDescAcao" placeholder="Filtrar descrição..." oninput="applyFilters()">
+            </div>
+            <div class="filter-group">
+                <label for="filterDescPO">Descrição PO</label>
+                <input type="text" id="filterDescPO" placeholder="Filtrar desc. PO..." oninput="applyFilters()">
+            </div>
+        </div>
+
         <!-- Loader -->
         <div id="loader" class="loader-container">
             <div class="spinner"></div>
@@ -35,13 +55,14 @@
                 <table id="dataTable">
                     <thead>
                         <tr>
-                            <!-- Cabecalhos serao preenchidos via JS para dinamismo, mas podemos deixar fixos para controle de largura -->
                             <th>Ações</th>
-                            <th>Ano</th>
-                            <th>Ação Gov</th>
-                            <th>PO_parte1</th>
-                            <th>DOT. INICIAL</th>
-                            <th>DOT. ATUALIZADA</th>
+                            <th>Ano Lanc.</th>
+                            <th>Descrição da Ação</th>
+                            <th>Plano Orçamentário</th>
+                            <th>Descrição PO</th>
+                            <th>Projeto Inicial LOA</th>
+                            <th>Dotação Inicial</th>
+                            <th>Dotação Atualizada</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
