@@ -511,6 +511,12 @@ function switchTab(tabId) {
     if (loader && loader.style.display === 'none') {
         document.getElementById(tabId).style.display = 'block';
     }
+    
+    // Mostra o botão "Nova Ação" apenas na aba Visão Geral
+    const btnNovaAcao = document.getElementById('btnNovaAcao');
+    if (btnNovaAcao) {
+        btnNovaAcao.style.display = tabId === 'view-geral' ? 'inline-flex' : 'none';
+    }
 }
 
 // Iniciar a aplicação

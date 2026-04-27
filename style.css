@@ -165,8 +165,9 @@ button {
     background: none;
     border: none;
     padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-transform: uppercase;
     color: var(--text-muted);
     cursor: pointer;
     border-bottom: 2px solid transparent;
