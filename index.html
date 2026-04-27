@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Dados - LOA</title>
+    <!-- Fonte Inter do Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Ícones -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Principal -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>Painel de Ações LOA (SCTIE)</h1>
+                <p>Gerenciamento Integrado com Google Sheets</p>
+            </div>
+            <button class="btn-primary" onclick="openModal('create')">
+                <i class="ri-add-line"></i> Nova Ação
+            </button>
+        </header>
+
+        <!-- Loader -->
+        <div id="loader" class="loader-container">
+            <div class="spinner"></div>
+            <p>Carregando dados da planilha...</p>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-card" id="tableCard" style="display: none;">
+            <div class="table-wrapper">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <!-- Cabecalhos serao preenchidos via JS para dinamismo, mas podemos deixar fixos para controle de largura -->
+                            <th>Ações</th>
+                            <th>Ano</th>
+                            <th>Ação Gov</th>
+                            <th>PO_parte1</th>
+                            <th>DOT. INICIAL</th>
+                            <th>DOT. ATUALIZADA</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <!-- Linhas geradas dinamicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Formulario -->
+    <div class="modal-overlay" id="formModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Nova Ação</h2>
+                <button class="close-btn" onclick="closeModal()">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="dataForm">
+                    <input type="hidden" id="_rowId" name="_rowId">
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="Ano_Lancamento">Ano Lançamento</label>
+                            <input type="number" id="Ano_Lancamento" name="Ano Lançamento" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="Acao_Governo">Ação Governo</label>
+                            <input type="text" id="Acao_Governo" name="Ação Governo" required>
+                        </div>
+                        <div class="form-group full-width">
+                            <label for="Descricao_Acao">Descrição Ação</label>
+                            <input type="text" id="Descricao_Acao" name="Descrição Ação">
+                        </div>
+                        
+                        <!-- Agrupamento PO -->
+                        <div class="form-group">
+                            <label for="Plano_Orcamentario">Plano Orçamentário</label>
+                            <input type="text" id="Plano_Orcamentario" name="Plano Orçamentário">
+                        </div>
+                        <div class="form-group">
+                            <label for="PO_parte1">PO_parte1</label>
+                            <input type="text" id="PO_parte1" name="PO_parte1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="Fonte_SOF">Fonte SOF</label>
+                            <input type="text" id="Fonte_SOF" name="Fonte SOF">
+                        </div>
+                        <div class="form-group">
+                            <label for="PROJETO_INICIAL">Proj. Inicial - Fixação</label>
+                            <input type="number" step="0.01" id="PROJETO_INICIAL" name="PROJETO INICIAL DA LOA - FIXACAO DESPESA">
+                        </div>
+                        <div class="form-group">
+                            <label for="DOTACAO_INICIAL">Dotação Inicial</label>
+                            <input type="number" step="0.01" id="DOTACAO_INICIAL" name="DOTACAO INICIAL">
+                        </div>
+                        <div class="form-group">
+                            <label for="DOTACAO_ATUALIZADA">Dotação Atualizada</label>
+                            <input type="number" step="0.01" id="DOTACAO_ATUALIZADA" name="DOTACAO ATUALIZADA">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancelar</button>
+                <button class="btn-primary" id="saveBtn" onclick="saveData()">Salvar Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
