@@ -68,6 +68,7 @@ async function loadData() {
             renderTable();
             tableCard.style.display = 'block';
             document.getElementById('tableHeaderInfo').style.display = 'flex';
+            document.getElementById('kpiContainer').style.display = 'grid';
         } else {
             throw new Error(result.message);
         }
@@ -113,6 +114,36 @@ function formatCurrency(value) {
     return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+// Atualizar KPIs
+function updateKPIs() {
+    let sumProjeto = 0;
+    let sumDotacaoInicial = 0;
+    let sumDotacaoAtualizada = 0;
+
+    filteredData.forEach(row => {
+        const parseValue = (val) => {
+            if (val === null || val === undefined || val === '') return 0;
+            let num = val;
+            if (typeof val === 'string') {
+                let cleanStr = val.replace(/[^\d.,-]/g, '');
+                if (cleanStr.includes(',')) {
+                    cleanStr = cleanStr.replace(/\./g, '').replace(',', '.');
+                }
+                num = parseFloat(cleanStr);
+            }
+            return isNaN(num) ? 0 : Number(num);
+        };
+
+        sumProjeto += parseValue(row['Projeto Inicial LOA']);
+        sumDotacaoInicial += parseValue(row['Dotação Inicial']);
+        sumDotacaoAtualizada += parseValue(row['Dotação Atualizada']);
+    });
+
+    document.getElementById('kpiProjetoInicial').textContent = formatCurrency(sumProjeto);
+    document.getElementById('kpiDotacaoInicial').textContent = formatCurrency(sumDotacaoInicial);
+    document.getElementById('kpiDotacaoAtualizada').textContent = formatCurrency(sumDotacaoAtualizada);
+}
+
 // Renderizar Tabela
 function renderTable() {
     tableBody.innerHTML = '';
@@ -122,6 +153,8 @@ function renderTable() {
     if (counter) {
         counter.textContent = `${filteredData.length} de ${appData.length} linhas`;
     }
+    
+    updateKPIs();
     
     filteredData.forEach(row => {
         // Linha Principal
