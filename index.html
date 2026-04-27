@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Ícones -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <!-- Choices.js (Selects Múltiplos) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,19 +29,19 @@
         <div class="filters-container">
             <div class="filter-group">
                 <label for="filterAno">Ano Lançamento</label>
-                <input type="text" id="filterAno" placeholder="Ex: 2024" oninput="applyFilters()">
+                <select id="filterAno" multiple data-placeholder="Filtrar ano..."></select>
             </div>
             <div class="filter-group">
                 <label for="filterAcaoGov">Ação Governo</label>
-                <input type="text" id="filterAcaoGov" placeholder="Filtrar ação..." oninput="applyFilters()">
+                <select id="filterAcaoGov" multiple data-placeholder="Filtrar ação..."></select>
             </div>
             <div class="filter-group">
                 <label for="filterDescAcao">Descrição da Ação</label>
-                <input type="text" id="filterDescAcao" placeholder="Filtrar descrição..." oninput="applyFilters()">
+                <select id="filterDescAcao" multiple data-placeholder="Filtrar descrição..."></select>
             </div>
             <div class="filter-group">
                 <label for="filterDescPO">Descrição PO</label>
-                <input type="text" id="filterDescPO" placeholder="Filtrar desc. PO..." oninput="applyFilters()">
+                <select id="filterDescPO" multiple data-placeholder="Filtrar desc. PO..."></select>
             </div>
         </div>
 
@@ -139,6 +141,7 @@
     <!-- Notification Toast -->
     <div id="toast" class="toast"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

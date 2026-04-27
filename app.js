@@ -5,6 +5,9 @@ let appData = [];
 let filteredData = [];
 let currentAction = 'create'; // 'create' or 'update'
 
+// Choices.js instances
+let choicesAno, choicesAcaoGov, choicesDescAcao, choicesDescPO;
+
 // Elementos da UI
 const tableCard = document.getElementById('tableCard');
 const tableBody = document.getElementById('tableBody');
@@ -20,7 +23,22 @@ async function init() {
         showToast('Aviso: Configure a API_URL no arquivo app.js antes de prosseguir.', true);
         return;
     }
+    initChoices();
     await loadData();
+}
+
+// Inicializar os selects múltiplos do Choices.js
+function initChoices() {
+    const config = { removeItemButton: true, searchEnabled: true, itemSelectText: '' };
+    choicesAno = new Choices('#filterAno', config);
+    choicesAcaoGov = new Choices('#filterAcaoGov', config);
+    choicesDescAcao = new Choices('#filterDescAcao', config);
+    choicesDescPO = new Choices('#filterDescPO', config);
+
+    document.getElementById('filterAno').addEventListener('change', applyFilters);
+    document.getElementById('filterAcaoGov').addEventListener('change', applyFilters);
+    document.getElementById('filterDescAcao').addEventListener('change', applyFilters);
+    document.getElementById('filterDescPO').addEventListener('change', applyFilters);
 }
 
 // Mostra notificações na tela
@@ -45,6 +63,7 @@ async function loadData() {
 
         if (result.status === 'success') {
             appData = result.data;
+            populateChoices();
             filteredData = [...appData];
             renderTable();
             tableCard.style.display = 'block';
@@ -56,6 +75,19 @@ async function loadData() {
     } finally {
         loader.style.display = 'none';
     }
+}
+
+// Popular as opções do dropdown com valores únicos
+function populateChoices() {
+    const anos = [...new Set(appData.map(r => r['Ano Lançamento']).filter(Boolean))].sort();
+    const acoes = [...new Set(appData.map(r => r['Ação Governo']).filter(Boolean))].sort();
+    const descAcoes = [...new Set(appData.map(r => r['Descrição Ação']).filter(Boolean))].sort();
+    const descPOs = [...new Set(appData.map(r => r['Descrição PO']).filter(Boolean))].sort();
+
+    choicesAno.setChoices(anos.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
+    choicesAcaoGov.setChoices(acoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
+    choicesDescAcao.setChoices(descAcoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
+    choicesDescPO.setChoices(descPOs.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
 }
 
 // Formatador de Moeda
@@ -120,21 +152,24 @@ function renderTable() {
 
 // Filtros
 function applyFilters() {
-    const filterAno = document.getElementById('filterAno').value.toLowerCase();
-    const filterAcaoGov = document.getElementById('filterAcaoGov').value.toLowerCase();
-    const filterDescAcao = document.getElementById('filterDescAcao').value.toLowerCase();
-    const filterDescPO = document.getElementById('filterDescPO').value.toLowerCase();
+    // Array vazio significa que nada foi selecionado (mostrar tudo)
+    const selAno = choicesAno.getValue(true) || [];
+    const selAcaoGov = choicesAcaoGov.getValue(true) || [];
+    const selDescAcao = choicesDescAcao.getValue(true) || [];
+    const selDescPO = choicesDescPO.getValue(true) || [];
 
     filteredData = appData.filter(row => {
-        const ano = (row['Ano Lançamento'] || '').toString().toLowerCase();
-        const acaoGov = (row['Ação Governo'] || '').toString().toLowerCase();
-        const descAcao = (row['Descrição Ação'] || '').toString().toLowerCase();
-        const descPO = (row['Descrição PO'] || '').toString().toLowerCase();
+        const ano = (row['Ano Lançamento'] || '').toString();
+        const acaoGov = (row['Ação Governo'] || '').toString();
+        const descAcao = (row['Descrição Ação'] || '').toString();
+        const descPO = (row['Descrição PO'] || '').toString();
 
-        return ano.includes(filterAno) &&
-               acaoGov.includes(filterAcaoGov) &&
-               descAcao.includes(filterDescAcao) &&
-               descPO.includes(filterDescPO);
+        const matchAno = selAno.length === 0 || selAno.includes(ano);
+        const matchAcaoGov = selAcaoGov.length === 0 || selAcaoGov.includes(acaoGov);
+        const matchDescAcao = selDescAcao.length === 0 || selDescAcao.includes(descAcao);
+        const matchDescPO = selDescPO.length === 0 || selDescPO.includes(descPO);
+
+        return matchAno && matchAcaoGov && matchDescAcao && matchDescPO;
     });
 
     renderTable();
