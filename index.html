@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
     <div class="app-container">
         <!-- Header Principal -->
@@ -39,97 +41,106 @@
 
         <div id="view-geral" class="tab-content" style="display: none;">
             <!-- Filtros Superiores -->
-        <div class="filters-container">
-            <div class="filter-group">
-                <label for="filterAno">Ano Lançamento</label>
-                <select id="filterAno" multiple data-placeholder="Filtrar ano..."></select>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label for="filterAno">Ano Lançamento</label>
+                    <select id="filterAno" multiple data-placeholder="Filtrar ano..."></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterAcaoGov">Ação Governo</label>
+                    <select id="filterAcaoGov" multiple data-placeholder="Filtrar ação..."></select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterDescAcao">Descrição da Ação</label>
+                    <select id="filterDescAcao" multiple data-placeholder="Filtrar descrição..."></select>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn-secondary icon-only" id="clearFiltersBtn" onclick="clearFilters()"
+                        title="Limpar todos os filtros">
+                        <i class="ri-filter-off-line"></i>
+                    </button>
+                </div>
             </div>
-            <div class="filter-group">
-                <label for="filterAcaoGov">Ação Governo</label>
-                <select id="filterAcaoGov" multiple data-placeholder="Filtrar ação..."></select>
+
+            <!-- KPIs -->
+            <div class="kpi-container" id="kpiContainer" style="display: none;">
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #e0f2fe; color: #0ea5e9;">
+                        <i class="ri-file-chart-line"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <p>Projeto Inicial LOA</p>
+                        <h3 id="kpiProjetoInicial">R$ 0,00</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #fef3c7; color: #f59e0b;">
+                        <i class="ri-funds-line"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <p>Dotação Inicial</p>
+                        <h3 id="kpiDotacaoInicial">R$ 0,00</h3>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-icon" style="background-color: #dcfce7; color: #22c55e;">
+                        <i class="ri-line-chart-line"></i>
+                    </div>
+                    <div class="kpi-info">
+                        <p>Dotação Atualizada</p>
+                        <h3 id="kpiDotacaoAtualizada">R$ 0,00</h3>
+                    </div>
+                </div>
             </div>
-            <div class="filter-group">
-                <label for="filterDescAcao">Descrição da Ação</label>
-                <select id="filterDescAcao" multiple data-placeholder="Filtrar descrição..."></select>
-            </div>
-            <div class="filter-actions">
-                <button class="btn-secondary icon-only" id="clearFiltersBtn" onclick="clearFilters()" title="Limpar todos os filtros">
-                    <i class="ri-filter-off-line"></i>
+
+            <div class="action-bar" id="actionBar" style="display: none; margin-bottom: 1rem; text-align: right;">
+                <button class="btn-primary" id="btnNovaAcao" onclick="openModal('create')">
+                    <i class="ri-add-line"></i> Nova Ação
                 </button>
             </div>
-        </div>
 
-        <!-- KPIs -->
-        <div class="kpi-container" id="kpiContainer" style="display: none;">
-            <div class="kpi-card">
-                <div class="kpi-icon" style="background-color: #e0f2fe; color: #0ea5e9;">
-                    <i class="ri-file-chart-line"></i>
-                </div>
-                <div class="kpi-info">
-                    <p>Projeto Inicial LOA</p>
-                    <h3 id="kpiProjetoInicial">R$ 0,00</h3>
-                </div>
+            <!-- Tabela -->
+            <div class="table-header-info" id="tableHeaderInfo" style="display: none;">
+                <p id="recordCounter" class="record-counter">0 de 0 linhas</p>
             </div>
-            <div class="kpi-card">
-                <div class="kpi-icon" style="background-color: #fef3c7; color: #f59e0b;">
-                    <i class="ri-funds-line"></i>
+            <div class="table-card" id="tableCard" style="display: none;">
+                <div class="table-wrapper">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px"></th>
+                                <th>Ações</th>
+                                <th class="sortable" onclick="sortTable('Ano Lançamento')" data-col="Ano Lançamento">Ano
+                                    Lanc. <i class="ri-arrow-up-down-line sort-icon"></i></th>
+                                <th class="sortable" onclick="sortTable('Plano Orçamentário')"
+                                    data-col="Plano Orçamentário">Plano Orçamentário <i
+                                        class="ri-arrow-up-down-line sort-icon"></i></th>
+                                <th class="sortable" onclick="sortTable('Projeto Inicial LOA')"
+                                    data-col="Projeto Inicial LOA">Projeto Inicial LOA <i
+                                        class="ri-arrow-up-down-line sort-icon"></i></th>
+                                <th class="sortable" onclick="sortTable('Dotação Inicial')" data-col="Dotação Inicial">
+                                    Dotação Inicial <i class="ri-arrow-up-down-line sort-icon"></i></th>
+                                <th class="sortable" onclick="sortTable('Dotação Atualizada')"
+                                    data-col="Dotação Atualizada">Dotação Atualizada <i
+                                        class="ri-arrow-up-down-line sort-icon"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                        </tbody>
+                    </table>
                 </div>
-                <div class="kpi-info">
-                    <p>Dotação Inicial</p>
-                    <h3 id="kpiDotacaoInicial">R$ 0,00</h3>
-                </div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-icon" style="background-color: #dcfce7; color: #22c55e;">
-                    <i class="ri-line-chart-line"></i>
-                </div>
-                <div class="kpi-info">
-                    <p>Dotação Atualizada</p>
-                    <h3 id="kpiDotacaoAtualizada">R$ 0,00</h3>
-                </div>
-            </div>
-        </div>
 
-        <div class="action-bar" id="actionBar" style="display: none; margin-bottom: 1rem; text-align: right;">
-            <button class="btn-primary" id="btnNovaAcao" onclick="openModal('create')">
-                <i class="ri-add-line"></i> Nova Ação
-            </button>
-        </div>
-
-        <!-- Tabela -->
-        <div class="table-header-info" id="tableHeaderInfo" style="display: none;">
-            <p id="recordCounter" class="record-counter">0 de 0 linhas</p>
-        </div>
-        <div class="table-card" id="tableCard" style="display: none;">
-            <div class="table-wrapper">
-                <table id="dataTable">
-                    <thead>
-                        <tr>
-                            <th style="width: 40px"></th>
-                            <th>Ações</th>
-                            <th class="sortable" onclick="sortTable('Ano Lançamento')" data-col="Ano Lançamento">Ano Lanc. <i class="ri-arrow-up-down-line sort-icon"></i></th>
-                            <th class="sortable" onclick="sortTable('Plano Orçamentário')" data-col="Plano Orçamentário">Plano Orçamentário <i class="ri-arrow-up-down-line sort-icon"></i></th>
-                            <th class="sortable" onclick="sortTable('Projeto Inicial LOA')" data-col="Projeto Inicial LOA">Projeto Inicial LOA <i class="ri-arrow-up-down-line sort-icon"></i></th>
-                            <th class="sortable" onclick="sortTable('Dotação Inicial')" data-col="Dotação Inicial">Dotação Inicial <i class="ri-arrow-up-down-line sort-icon"></i></th>
-                            <th class="sortable" onclick="sortTable('Dotação Atualizada')" data-col="Dotação Atualizada">Dotação Atualizada <i class="ri-arrow-up-down-line sort-icon"></i></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                    </tbody>
-                </table>
+                <!-- Paginação -->
+                <div class="pagination-container" id="paginationContainer" style="display: none;">
+                    <button class="btn-secondary pagination-btn" id="btnPrevPage" onclick="changePage(-1)">
+                        <i class="ri-arrow-left-s-line"></i> Anterior
+                    </button>
+                    <span class="pagination-info" id="pageInfo">Página 1 de 1</span>
+                    <button class="btn-secondary pagination-btn" id="btnNextPage" onclick="changePage(1)">
+                        Próximo <i class="ri-arrow-right-s-line"></i>
+                    </button>
+                </div>
             </div>
-            
-            <!-- Paginação -->
-            <div class="pagination-container" id="paginationContainer" style="display: none;">
-                <button class="btn-secondary pagination-btn" id="btnPrevPage" onclick="changePage(-1)">
-                    <i class="ri-arrow-left-s-line"></i> Anterior
-                </button>
-                <span class="pagination-info" id="pageInfo">Página 1 de 1</span>
-                <button class="btn-secondary pagination-btn" id="btnNextPage" onclick="changePage(1)">
-                    Próximo <i class="ri-arrow-right-s-line"></i>
-                </button>
-            </div>
-        </div>
         </div> <!-- Fim view-geral -->
 
         <div id="view-graficos" class="tab-content" style="display: none;">
@@ -145,8 +156,10 @@
     <!-- Footer -->
     <footer class="app-footer">
         <p>Este sistema está em desenvolvimento, como teste.<br>
-        Está sendo elaborado utilizando ferramentas de IA, como o Antigravity e prompts de IA com o modelo Gemini 3.1 Pro.<br>
-        Para maiores informações, por favor entre em contato com <a href="mailto:marcos.mesquita@saude.gov.br">marcos.mesquita@saude.gov.br</a>.</p>
+            Está sendo elaborado utilizando ferramentas de IA, como o Antigravity e prompts de IA com o modelo Gemini
+            3.1 Pro.<br>
+            Para maiores informações, por favor entre em contato com <a
+                href="mailto:marcos.mesquita@saude.gov.br">marcos.mesquita@saude.gov.br</a>.</p>
     </footer>
 
     <!-- Modal Formulario -->
@@ -161,7 +174,7 @@
             <div class="modal-body">
                 <form id="dataForm">
                     <input type="hidden" id="_rowId" name="_rowId">
-                    
+
                     <div class="form-grid">
                         <div class="form-group">
                             <label for="Ano_Lancamento">Ano Lançamento</label>
@@ -175,7 +188,7 @@
                             <label for="Descricao_Acao">Descrição Ação</label>
                             <input type="text" id="Descricao_Acao" name="Descrição da Ação">
                         </div>
-                        
+
                         <!-- Agrupamento PO -->
                         <div class="form-group">
                             <label for="Plano_Orcamentario">Plano Orçamentário</label>
@@ -185,7 +198,7 @@
                             <label for="PO_parte1">PO_parte1</label>
                             <input type="text" id="PO_parte1" name="PO_parte1">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="Fonte_SOF">Fonte SOF</label>
                             <input type="text" id="Fonte_SOF" name="Fonte SOF">
@@ -218,4 +231,5 @@
     <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="app.js"></script>
 </body>
+
 </html>
