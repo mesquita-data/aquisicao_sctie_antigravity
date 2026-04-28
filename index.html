@@ -12,6 +12,8 @@
     <!-- Choices.js (Selects Múltiplos) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
     <link rel="stylesheet" href="style.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -144,10 +146,24 @@
         </div> <!-- Fim view-geral -->
 
         <div id="view-graficos" class="tab-content" style="display: none;">
-            <div class="empty-state">
-                <i class="ri-bar-chart-grouped-line"></i>
-                <h2>Área de Gráficos</h2>
-                <p>Esta seção está em construção e em breve abrigará os painéis analíticos dinâmicos.</p>
+            <div class="charts-header">
+                <h2>Ação Governo por Ano</h2>
+                <div class="filter-group" style="min-width: 300px;">
+                    <label for="filterGraficoAcaoGov">Ação Governo</label>
+                    <select id="filterGraficoAcaoGov" multiple data-placeholder="Filtrar ação para gráficos..."></select>
+                </div>
+            </div>
+            
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <canvas id="chartBar"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="chartLine"></canvas>
+                </div>
+                <div class="chart-card">
+                    <canvas id="chartArea"></canvas>
+                </div>
             </div>
         </div>
 

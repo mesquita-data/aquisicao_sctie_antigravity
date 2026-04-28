@@ -10,7 +10,12 @@ let currentPage = 1;
 const rowsPerPage = 10;
 
 // Choices.js instances
-let choicesAno, choicesAcaoGov, choicesDescAcao;
+let choicesAno, choicesAcaoGov, choicesDescAcao, choicesGraficoAcaoGov;
+
+// Chart.js instances
+let chartBarInstance = null;
+let chartLineInstance = null;
+let chartAreaInstance = null;
 
 // Elementos da UI
 const tableCard = document.getElementById('tableCard');
@@ -41,6 +46,9 @@ function initChoices() {
     document.getElementById('filterAno').addEventListener('change', applyFilters);
     document.getElementById('filterAcaoGov').addEventListener('change', applyFilters);
     document.getElementById('filterDescAcao').addEventListener('change', applyFilters);
+
+    choicesGraficoAcaoGov = new Choices('#filterGraficoAcaoGov', config);
+    document.getElementById('filterGraficoAcaoGov').addEventListener('change', renderCharts);
 }
 
 // Mostra notificações na tela
@@ -74,6 +82,8 @@ async function loadData() {
             document.getElementById('actionBar').style.display = 'block';
             document.getElementById('paginationContainer').style.display = 'flex';
             
+            renderCharts();
+            
             // Verifica qual aba está ativa e a exibe
             const activeTab = document.querySelector('.tab-btn.active');
             if (activeTab) {
@@ -103,6 +113,9 @@ function populateChoices() {
     choicesAno.setChoices(anos.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
     choicesAcaoGov.setChoices(acoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
     choicesDescAcao.setChoices(descAcoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
+    
+    choicesGraficoAcaoGov.clearChoices();
+    choicesGraficoAcaoGov.setChoices(acoes.map(a => ({ value: a.toString(), label: a.toString() })), 'value', 'label', true);
 }
 
 // Formatador de Moeda
@@ -129,6 +142,19 @@ function formatCurrency(value) {
     return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
+function parseNumericValue(val) {
+    if (val === null || val === undefined || val === '') return 0;
+    let num = val;
+    if (typeof val === 'string') {
+        let cleanStr = val.replace(/[^\d.,-]/g, '');
+        if (cleanStr.includes(',')) {
+            cleanStr = cleanStr.replace(/\./g, '').replace(',', '.');
+        }
+        num = parseFloat(cleanStr);
+    }
+    return isNaN(num) ? 0 : Number(num);
+}
+
 // Atualizar KPIs
 function updateKPIs() {
     let sumProjeto = 0;
@@ -136,22 +162,9 @@ function updateKPIs() {
     let sumDotacaoAtualizada = 0;
 
     filteredData.forEach(row => {
-        const parseValue = (val) => {
-            if (val === null || val === undefined || val === '') return 0;
-            let num = val;
-            if (typeof val === 'string') {
-                let cleanStr = val.replace(/[^\d.,-]/g, '');
-                if (cleanStr.includes(',')) {
-                    cleanStr = cleanStr.replace(/\./g, '').replace(',', '.');
-                }
-                num = parseFloat(cleanStr);
-            }
-            return isNaN(num) ? 0 : Number(num);
-        };
-
-        sumProjeto += parseValue(row['Projeto Inicial LOA']);
-        sumDotacaoInicial += parseValue(row['Dotação Inicial']);
-        sumDotacaoAtualizada += parseValue(row['Dotação Atualizada']);
+        sumProjeto += parseNumericValue(row['Projeto Inicial LOA']);
+        sumDotacaoInicial += parseNumericValue(row['Dotação Inicial']);
+        sumDotacaoAtualizada += parseNumericValue(row['Dotação Atualizada']);
     });
 
     document.getElementById('kpiProjetoInicial').textContent = formatCurrency(sumProjeto);
@@ -512,6 +525,88 @@ function switchTab(tabId) {
     if (loader && loader.style.display === 'none') {
         document.getElementById(tabId).style.display = 'block';
     }
+}
+
+// Gráficos
+function renderCharts() {
+    const selectedAcoes = choicesGraficoAcaoGov.getValue(true) || [];
+    let chartData = appData;
+    
+    if (selectedAcoes.length > 0) {
+        chartData = appData.filter(row => selectedAcoes.includes(row['Ação Governo']));
+    }
+
+    const years = [...new Set(chartData.map(r => r['Ano Lançamento']).filter(Boolean))].sort();
+    let acoesSet = [...new Set(chartData.map(r => r['Ação Governo']).filter(Boolean))].sort();
+    
+    // Se não houver filtro, exibir no máximo as 10 principais para não poluir o gráfico
+    if (selectedAcoes.length === 0 && acoesSet.length > 10) {
+        acoesSet = acoesSet.slice(0, 10);
+    }
+
+    const colors = [
+        '#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', 
+        '#ec4899', '#14b8a6', '#f97316', '#6366f1', '#84cc16'
+    ];
+
+    const datasetsBar = [];
+    const datasetsLine = [];
+    const datasetsArea = [];
+
+    acoesSet.forEach((acao, index) => {
+        const data = years.map(year => {
+            return chartData
+                .filter(r => r['Ação Governo'] === acao && r['Ano Lançamento'] === year)
+                .reduce((acc, curr) => acc + parseNumericValue(curr['Projeto Inicial LOA']), 0);
+        });
+
+        const color = colors[index % colors.length];
+
+        datasetsBar.push({ label: acao, data: data, backgroundColor: color });
+        datasetsLine.push({ label: acao, data: data, borderColor: color, tension: 0.3, fill: false });
+        datasetsArea.push({ label: acao, data: data, backgroundColor: color + '80', borderColor: color, tension: 0.3, fill: true });
+    });
+
+    const commonOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: { position: 'bottom' },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.dataset.label || '';
+                        if (label) { label += ': '; }
+                        if (context.parsed.y !== null) {
+                            label += new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(context.parsed.y);
+                        }
+                        return label;
+                    }
+                }
+            }
+        }
+    };
+
+    if (chartBarInstance) chartBarInstance.destroy();
+    chartBarInstance = new Chart(document.getElementById('chartBar'), {
+        type: 'bar',
+        data: { labels: years, datasets: datasetsBar },
+        options: { ...commonOptions, plugins: { ...commonOptions.plugins, title: { display: true, text: 'Valores por Ano (Barras)' } }, scales: { x: { stacked: true }, y: { stacked: true } } }
+    });
+
+    if (chartLineInstance) chartLineInstance.destroy();
+    chartLineInstance = new Chart(document.getElementById('chartLine'), {
+        type: 'line',
+        data: { labels: years, datasets: datasetsLine },
+        options: { ...commonOptions, plugins: { ...commonOptions.plugins, title: { display: true, text: 'Valores por Ano (Linhas)' } } }
+    });
+
+    if (chartAreaInstance) chartAreaInstance.destroy();
+    chartAreaInstance = new Chart(document.getElementById('chartArea'), {
+        type: 'line',
+        data: { labels: years, datasets: datasetsArea },
+        options: { ...commonOptions, plugins: { ...commonOptions.plugins, title: { display: true, text: 'Valores por Ano (Superfície Empilhada)' } }, scales: { y: { stacked: true } } }
+    });
 }
 
 // Iniciar a aplicação
