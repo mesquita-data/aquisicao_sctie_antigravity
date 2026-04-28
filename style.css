@@ -485,8 +485,11 @@ tr.expanded {
 
 tr.details-row td {
     padding: 0;
-    border-bottom: 2px solid var(--primary);
     background-color: #f8fafc;
+}
+
+tr.details-row {
+    border-bottom: 2px solid var(--primary);
 }
 
 .details-content {
@@ -506,7 +509,6 @@ tr.details-row td {
 td {
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
-    border-bottom: 1px solid var(--border);
     color: var(--text-main);
     white-space: nowrap;
     vertical-align: middle;
@@ -514,6 +516,7 @@ td {
 
 tbody tr {
     transition: background-color 0.2s ease;
+    border-bottom: 1px solid var(--border);
 }
 
 tbody tr:hover {
@@ -524,6 +527,8 @@ tbody tr:hover {
     display: flex;
     gap: 0.25rem;
     align-items: center;
+    justify-content: flex-start;
+    min-height: 1.5rem; /* Garante altura mínima para alinhar com texto */
 }
 
 /* Form Modal */

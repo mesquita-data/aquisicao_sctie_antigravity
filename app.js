@@ -212,17 +212,18 @@ function renderTable() {
         
         // Ações
         const tdActions = document.createElement('td');
-        tdActions.className = 'actions-cell';
         tdActions.innerHTML = `
-            <button class="btn-icon edit" onclick="openModal('update', ${row._rowId})" title="Editar">
-                <i class="ri-pencil-line"></i>
-            </button>
-            <button class="btn-icon clone" onclick="openModal('clone', ${row._rowId})" title="Clonar">
-                <i class="ri-file-copy-line"></i>
-            </button>
-            <button class="btn-icon delete" onclick="deleteData(${row._rowId})" title="Excluir">
-                <i class="ri-delete-bin-line"></i>
-            </button>
+            <div class="actions-cell">
+                <button class="btn-icon edit" onclick="openModal('update', ${row._rowId})" title="Editar">
+                    <i class="ri-pencil-line"></i>
+                </button>
+                <button class="btn-icon clone" onclick="openModal('clone', ${row._rowId})" title="Clonar">
+                    <i class="ri-file-copy-line"></i>
+                </button>
+                <button class="btn-icon delete" onclick="deleteData(${row._rowId})" title="Excluir">
+                    <i class="ri-delete-bin-line"></i>
+                </button>
+            </div>
         `;
         
         // Dados Principais
