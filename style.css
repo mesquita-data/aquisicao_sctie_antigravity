@@ -134,7 +134,7 @@ body.dark-theme tr.details-row td {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     line-height: 1.5;
@@ -309,6 +309,14 @@ button {
     gap: 1rem;
 }
 
+.filters-title {
+    grid-column: 1 / -1;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: -0.5rem;
+}
+
 .filter-group {
     display: flex;
     flex-direction: column;
@@ -424,13 +432,14 @@ table {
 th {
     background-color: #f8fafc;
     padding: 1rem;
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.85rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     color: var(--text-muted);
     border-bottom: 1px solid var(--border);
     white-space: nowrap;
+    vertical-align: middle;
 }
 
 th.sortable {
@@ -495,11 +504,12 @@ tr.details-row td {
 }
 
 td {
-    padding: 1rem;
-    font-size: 0.875rem;
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
     border-bottom: 1px solid var(--border);
     color: var(--text-main);
     white-space: nowrap;
+    vertical-align: middle;
 }
 
 tbody tr {
@@ -513,6 +523,7 @@ tbody tr:hover {
 .actions-cell {
     display: flex;
     gap: 0.25rem;
+    align-items: center;
 }
 
 /* Form Modal */
