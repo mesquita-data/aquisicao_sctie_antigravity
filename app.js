@@ -32,6 +32,7 @@ async function init() {
         showToast('Aviso: Configure a API_URL no arquivo app.js antes de prosseguir.', true);
         return;
     }
+    initTheme();
     initChoices();
     await loadData();
 }
@@ -607,6 +608,61 @@ function renderCharts() {
         data: { labels: years, datasets: datasetsArea },
         options: { ...commonOptions, plugins: { ...commonOptions.plugins, title: { display: true, text: 'Valores por Ano (Superfície Empilhada)' } }, scales: { y: { stacked: true } } }
     });
+}
+
+// Gerenciar Tema Escuro
+function toggleDarkMode() {
+    const body = document.body;
+    const btnIcon = document.querySelector('#btnThemeToggle i');
+    
+    body.classList.toggle('dark-theme');
+    
+    if (body.classList.contains('dark-theme')) {
+        if(btnIcon) {
+            btnIcon.classList.remove('ri-moon-line');
+            btnIcon.classList.add('ri-sun-line');
+        }
+        localStorage.setItem('theme', 'dark');
+        if(window.Chart) {
+            Chart.defaults.color = '#f8fafc';
+            Chart.defaults.scale.grid.color = '#334155';
+        }
+    } else {
+        if(btnIcon) {
+            btnIcon.classList.remove('ri-sun-line');
+            btnIcon.classList.add('ri-moon-line');
+        }
+        localStorage.setItem('theme', 'light');
+        if(window.Chart) {
+            Chart.defaults.color = '#64748b';
+            Chart.defaults.scale.grid.color = '#e2e8f0';
+        }
+    }
+
+    if (appData && appData.length > 0) {
+        renderCharts();
+    }
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+        const btnIcon = document.querySelector('#btnThemeToggle i');
+        if(btnIcon) {
+            btnIcon.classList.remove('ri-moon-line');
+            btnIcon.classList.add('ri-sun-line');
+        }
+        if(window.Chart) {
+            Chart.defaults.color = '#f8fafc';
+            Chart.defaults.scale.grid.color = '#334155';
+        }
+    } else {
+        if(window.Chart) {
+            Chart.defaults.color = '#64748b';
+            Chart.defaults.scale.grid.color = '#e2e8f0';
+        }
+    }
 }
 
 // Iniciar a aplicação

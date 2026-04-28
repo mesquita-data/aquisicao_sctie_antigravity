@@ -16,6 +16,65 @@
     --radius: 0.75rem;
 }
 
+/* Dark Mode */
+body.dark-theme {
+    --bg-color: #0f172a;
+    --card-bg: #1e293b;
+    --secondary: #334155;
+    --secondary-hover: #475569;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.4);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.5);
+}
+
+body.dark-theme .header-content h1 {
+    color: #60a5fa;
+}
+
+body.dark-theme table th {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+body.dark-theme .form-control {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-color: #334155;
+}
+
+body.dark-theme .choices__inner {
+    background-color: #0f172a;
+    border-color: #334155;
+}
+
+body.dark-theme .choices__input {
+    background-color: transparent;
+    color: #f8fafc;
+}
+
+body.dark-theme .choices__list--dropdown {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+body.dark-theme .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: #334155;
+}
+
+body.dark-theme .kpi-icon {
+    opacity: 0.8;
+}
+
+body.dark-theme .pagination-btn:disabled {
+    background-color: #334155;
+    color: #64748b;
+    border-color: #334155;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -94,11 +153,18 @@ body {
     font-size: 1rem;
 }
 
-.app-header .btn-primary {
+.app-header .theme-toggle {
     position: absolute;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: var(--text-muted);
+}
+
+.app-header .theme-toggle:hover {
+    color: var(--text-main);
+    background-color: var(--secondary);
 }
 
 /* Buttons */
