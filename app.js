@@ -646,7 +646,8 @@ function toggleDarkMode() {
 
 function initTheme() {
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
+    // Default to dark if nothing saved or if explicitly saved as dark
+    if (savedTheme === 'dark' || savedTheme === null) {
         document.body.classList.add('dark-theme');
         const btnIcon = document.querySelector('#btnThemeToggle i');
         if(btnIcon) {

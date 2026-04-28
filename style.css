@@ -75,6 +75,23 @@ body.dark-theme .pagination-btn:disabled {
     border-color: #334155;
 }
 
+body.dark-theme tbody tr:hover {
+    background-color: #334155;
+}
+
+body.dark-theme th.sortable:hover {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+body.dark-theme tr.expanded {
+    background-color: #334155;
+}
+
+body.dark-theme tr.details-row td {
+    background-color: #0f172a;
+}
+
 * {
     margin: 0;
     padding: 0;
